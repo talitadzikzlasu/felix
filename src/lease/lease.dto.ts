@@ -12,7 +12,7 @@ export class CreateLeaseInput implements Partial<Lease> {
   @Field()
   start!: Date;
 
-  @Field({nullable: true})
+  @Field(() => Date, {nullable: true})
   end?: Date | null;
 
   @Field(() => Float)
