@@ -14,7 +14,8 @@ Additional:
 
 - 30 min consider alternative solutions, write proposed solutions notes
 - 60 min implement and test chosen solution, write notes
-- 15 min review notes
+- 20 min review notes
+- 15 min fix bugs, write simple tests
 
 ### **Feedback notes**
 
