@@ -20,6 +20,12 @@ export class CreateLeaseInput implements Partial<Lease> {
 
   @Field(() => Float)
   deposit!: number;
+
+  @Field()
+  dueDayOfMonth?: number | undefined;
+
+  @Field()
+  graceDays?: number | undefined;
 }
 
 @ArgsType()
