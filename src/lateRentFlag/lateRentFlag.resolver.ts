@@ -31,6 +31,12 @@ export default class LateRentFlagResolver {
     return true;
   }
 
+  // Does tenant have any flagged late payments
+  @Query(() => Boolean)
+  async isTenantFlaggedLate(@Arg('tenantId', () => Int) tenantId: number): Promise<boolean> {
+    return LateRentFlag.exists({where: {tenantId, isOn: true}});
+  }
+
   // Is tenant marked as late in given period
   @Query(() => Boolean)
   async isTenantLateInPeriod(@Args() data: IsTenantLateInPeriodArgs): Promise<boolean> {
@@ -51,13 +57,6 @@ export default class LateRentFlagResolver {
     return Tenant.createQueryBuilder('t')
       .where('t.id IN (:...ids)', {ids})
       .getMany();
-  }
-
-  // ADDITIONAL possibilities with this setup
-  // Does tenant have any flagged late payments
-  @Query(() => Boolean)
-  async isTenantFlaggedLate(@Arg('tenantId', () => Int) tenantId: number): Promise<boolean> {
-    return LateRentFlag.exists({where: {tenantId, isOn: true}});
   }
 
   // List of all periods where tenant is marked as late.
