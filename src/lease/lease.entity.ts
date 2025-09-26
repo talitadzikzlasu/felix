@@ -33,8 +33,8 @@ class Lease extends BaseEntity {
   @Column()
   start!: Date;
 
-  @Field({nullable: true})
-  @Column({nullable: true})
+  @Field(() => Date, {nullable: true})
+  @Column({type: Date, nullable: true})
   end?: Date | null;
 
   @Field(() => Float)
