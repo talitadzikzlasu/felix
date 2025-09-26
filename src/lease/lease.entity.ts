@@ -67,14 +67,6 @@ class Lease extends BaseEntity {
   @UpdateDateColumn()
   updatedAt!: Date;
 
-  @Field(() => Int)
-  @Column({type: 'int', default: 1})
-  dueDayOfMonth!: number;
-
-  @Field(() => Int)
-  @Column({type: 'int', default: 0})
-  graceDays!: number;
-
   async getTenant(): Promise<Tenant> {
     const tenant = this.tenant || (await Tenant.findOneOrFail({where: {id: this.tenantId}}));
     this.tenant = tenant;
