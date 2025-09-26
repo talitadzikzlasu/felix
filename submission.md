@@ -19,6 +19,10 @@ Additional:
 
 ### **Feedback notes**
 
+I enjoyed solving this task. It simulates a typical daily programming challenge, which I think is a good way to assess someone's skills and working approach. I liked it, and if I were evaluating candidates, I would say it is a proper way to determine if someone is a good fit for the role.
+
+The 2-hour time frame was sufficient for completing the main task with PR review. I took some additional time to consider alternative solutions and include them in the notes.
+
 - creating new PR through `template` didn't copy the branches history -> creating PR in github was not possible. I cloned the repo and pushed it to newly created repo in my github account. Maybe this could be included in the instruction for future candidates instead of 'create from template'
 
 ### **Interview assumptions**
