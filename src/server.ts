@@ -4,6 +4,7 @@ import {ApolloServer} from 'apollo-server';
 import {buildSchema} from 'type-graphql';
 import ApartmentResolver from './apartment/apartment.resolver';
 import connectDB from './connectDB';
+import LateRentFlagResolver from './lateRentFlag/lateRentFlag.resolver';
 import LeaseResolver from './lease/lease.resolver';
 import PaymentResolver from './payment/payment.resolver';
 import TenantResolver from './tenant/tenant.resolver';
@@ -15,7 +16,7 @@ const PORT = process.env.PORT || 3005;
     await connectDB();
 
     const schema = await buildSchema({
-      resolvers: [ApartmentResolver, TenantResolver, LeaseResolver, PaymentResolver],
+      resolvers: [ApartmentResolver, TenantResolver, LeaseResolver, PaymentResolver, LateRentFlagResolver],
       validate: false,
     });
 
