@@ -1,18 +1,17 @@
 import {Resolver, Mutation, Query, Args, Arg, Int} from 'type-graphql';
 import LateRentFlag from './lateRentFlag.entity';
 import Tenant from '../tenant/tenant.entity';
-import {MarkRentLateArgs, UnmarkRentLateArgs, LateTenantsArgs, IsTenantFleggedLateInPeriodArgs} from './lateRentFlag.dto';
-
+import {MarkRentLateArgs, UnmarkRentLateArgs, LateTenantsArgs, IsTenantLateInPeriodArgs} from './lateRentFlag.dto';
 @Resolver(() => LateRentFlag)
 export default class LateRentFlagResolver {
-  // Mark rent late  manually
+  // Mark rent late
   @Mutation(() => Boolean)
   async markRentLate(@Args() data: MarkRentLateArgs): Promise<boolean> {
     await LateRentFlag.upsert({tenantId: data.tenantId, period: data.period, isOn: true}, ['tenantId', 'period']);
     return true;
   }
 
-  // Unmark rent late manually
+  // Unmark rent late
   @Mutation(() => Boolean)
   async unmarkRentLate(@Args() data: UnmarkRentLateArgs): Promise<boolean> {
     const row = await LateRentFlag.findOne({where: {tenantId: data.tenantId, period: data.period}});
@@ -25,17 +24,17 @@ export default class LateRentFlagResolver {
 
   // Is tenant marked as late in given period
   @Query(() => Boolean)
-  async isTenantFlaggedLateInPeriod(@Args() data: IsTenantFleggedLateInPeriodArgs): Promise<boolean> {
-    const period = data.period;
-    return LateRentFlag.exists({
-      where: {tenantId: data.tenantId, period, isOn: true},
-    });
+  async isTenantLateInPeriod(@Args() data: IsTenantLateInPeriodArgs): Promise<boolean> {
+    const {period, tenantId} = data;
+
+    return LateRentFlag.exists({where: {tenantId, period, isOn: true}});
   }
 
-  // List of tenants with manual flag - "Rent is Late" in given period
+  // List of tenants late with rent in given period
   @Query(() => [Tenant])
   async lateTenants(@Args() data: LateTenantsArgs): Promise<Tenant[]> {
-    const period = data.period;
+    const {period} = data;
+
     const flags = await LateRentFlag.find({where: {period, isOn: true}});
     if (!flags.length) return [];
     const ids = [...new Set(flags.map(f => f.tenantId))];

@@ -20,7 +20,7 @@ export class UnmarkRentLateArgs {
 }
 
 @ArgsType()
-export class IsTenantFleggedLateInPeriodArgs {
+export class IsTenantLateInPeriodArgs {
   @Field(() => Int)
   tenantId!: number;
 
