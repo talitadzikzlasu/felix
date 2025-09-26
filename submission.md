@@ -14,7 +14,7 @@ Additional:
 
 - 30 min consider alternative solutions, write proposed solutions notes
 - 60 min implement and test chosen solution, write notes
-- 20 min review notes
+- 25 min review notes
 - 15 min fix bugs, write simple tests
 
 ### **Feedback notes**
@@ -29,7 +29,7 @@ In the middle of leaving comments on PR, I realised it is important for me to kn
 
 ### **General suggestions**
 
-- apollo-server@2.14.4 is outdated, should be upgraded
+- apollo-server@2.14.4 is outdated, should be upgraded to v.4 (or newer)
 
 ### Context notes from task description
 
@@ -92,7 +92,7 @@ Create table with invoices for lease for each month.
 
 ## Needed TODO next/didn't include in my PR:
 
-- add tests
+- add tests (added only simple test)
 
 ## Optional what can be done next:
 
