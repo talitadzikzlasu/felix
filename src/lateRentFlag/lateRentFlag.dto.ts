@@ -1,5 +1,5 @@
-import {ArgsType, Field, Int} from 'type-graphql';
 import {IsOptional} from 'class-validator';
+import {ArgsType, Field, Int} from 'type-graphql';
 
 @ArgsType()
 export class MarkRentLateArgs {

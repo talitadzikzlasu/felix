@@ -1,13 +1,21 @@
 import {Resolver, Mutation, Query, Args, Arg, Int} from 'type-graphql';
-import LateRentFlag from './lateRentFlag.entity';
 import Tenant from '../tenant/tenant.entity';
 import {MarkRentLateArgs, UnmarkRentLateArgs, LateTenantsArgs, IsTenantLateInPeriodArgs} from './lateRentFlag.dto';
+import LateRentFlag from './lateRentFlag.entity';
+import LATE_RENT_FLAG_ERRORS from './lateRentFlag.errors';
+import {hasLeaseOverlap} from './lateRentFlag.util';
 @Resolver(() => LateRentFlag)
 export default class LateRentFlagResolver {
   // Mark rent late
   @Mutation(() => Boolean)
   async markRentLate(@Args() data: MarkRentLateArgs): Promise<boolean> {
+    const overlaps = await hasLeaseOverlap(data.tenantId, data.period);
+    if (!overlaps) {
+      throw new Error(LATE_RENT_FLAG_ERRORS.NO_LEASE_OVERLAP);
+    }
+
     await LateRentFlag.upsert({tenantId: data.tenantId, period: data.period, isOn: true}, ['tenantId', 'period']);
+
     return true;
   }
 
@@ -19,6 +27,7 @@ export default class LateRentFlagResolver {
       row.isOn = false;
       await LateRentFlag.save(row);
     }
+
     return true;
   }
 
@@ -38,6 +47,7 @@ export default class LateRentFlagResolver {
     const flags = await LateRentFlag.find({where: {period, isOn: true}});
     if (!flags.length) return [];
     const ids = [...new Set(flags.map(f => f.tenantId))];
+
     return Tenant.createQueryBuilder('t')
       .where('t.id IN (:...ids)', {ids})
       .getMany();
@@ -58,6 +68,7 @@ export default class LateRentFlagResolver {
       select: {period: true},
     });
     // TODO: add sorting periods
+
     return rows.map(r => r.period);
   }
 }

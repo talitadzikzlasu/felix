@@ -10,8 +10,11 @@ import {
   BeforeUpdate,
   Unique,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import Tenant from '../tenant/tenant.entity';
+import LATE_RENT_FLAG_ERRORS from './lateRentFlag.errors';
 
 @ObjectType()
 @Entity()
@@ -40,27 +43,20 @@ class LateRentFlag extends BaseEntity {
   @Column({default: true})
   isOn!: boolean;
 
-  @Field()
-  @Column()
+  @Field(() => Date)
+  @CreateDateColumn()
   createdAt!: Date;
 
-  @Field()
-  @Column()
+  @Field(() => Date)
+  @UpdateDateColumn()
   updatedAt!: Date;
-
-  async getTenant(): Promise<Tenant> {
-    const tenant = this.tenant || (await Tenant.findOneOrFail({where: {id: this.tenantId}}));
-    this.tenant = tenant;
-
-    return tenant;
-  }
 
   @BeforeInsert()
   @BeforeUpdate()
   validatePeriod(): void {
     // simple check for month: 01-12 and year: 0000 - 9999
-    if (this.period || this.period.match(/^(0[1-9]|1[0-2])-\d{4}$/)) {
-      throw new Error('Period must be: MM-YYYY');
+    if (!this.period || !/^(0[1-9]|1[0-2])-\d{4}$/.test(this.period)) {
+      throw new Error(LATE_RENT_FLAG_ERRORS.WRONG_PERIOD_FORMAT);
     }
   }
 }
